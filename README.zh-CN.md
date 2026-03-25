@@ -1,4 +1,4 @@
-# Toco AI
+<h1 align="center">Toco AI</h1>
 
 <p align="center">
   <b><a href="https://github.com/toco-ai/toco-ai/blob/main/README.md">English</a> | <a href="https://github.com/toco-ai/toco-ai/blob/main/README.ja-JP.md">日本語</a> | <a href="https://github.com/toco-ai/toco-ai/blob/main/README.zh-CN.md">中文 (Simplified)</a></b>
