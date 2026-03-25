@@ -4,7 +4,12 @@
   <b><a href="https://github.com/toco-ai/toco-ai/blob/main/README.md">English</a> | <a href="https://github.com/toco-ai/toco-ai/blob/main/README.ja-JP.md">日本語</a> | <a href="https://github.com/toco-ai/toco-ai/blob/main/README.zh-CN.md">中文 (Simplified)</a></b>
 </p>
 
-[![IntelliJ IDEA](https://img.shields.io/badge/IntelliJ-2024.03+-blue.svg)](https://tocoai.dev/en/docs/installation) [![VS Code](https://img.shields.io/badge/VS_Code-1.82.0+-blue.svg)](https://tocoai.dev/en/docs/installation-vscode) [![Discord](https://img.shields.io/badge/Discord-Join_Community-indigo.svg)](https://discord.gg/NubsdbF3MK) [![X](https://img.shields.io/badge/X-%40TocoAI-black.svg)](https://x.com/TocoAI)
+<p align="center">
+  <a href="https://tocoai.dev/en/docs/installation"><img src="https://img.shields.io/badge/IntelliJ_IDEA-2024.03+-blue?style=for-the-badge" alt="IntelliJ IDEA" /></a>
+  <a href="https://tocoai.dev/en/docs/installation-vscode"><img src="https://img.shields.io/badge/VS_Code-1.82.0+-blue?style=for-the-badge" alt="VS Code" /></a>
+  <a href="https://discord.gg/NubsdbF3MK"><img src="https://img.shields.io/badge/Discord-Join_Community-5865F2?style=for-the-badge" alt="Discord" /></a>
+  <a href="https://x.com/TocoAI"><img src="https://img.shields.io/badge/X-@TocoAI-000000?style=for-the-badge" alt="X" /></a>
+</p>
 
 > **TocoAI: Stop Vibe Coding. モデル駆動型の AI コーディングツール。**
 > まずモデリング、コードはその後。「ガチャ」のような運任せのAIプログラミングに別れを告げましょう。
