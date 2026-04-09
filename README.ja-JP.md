@@ -1,133 +1,323 @@
-<h1 align="center">Toco AI</h1>
+<div align="center">
 
-<p align="center">
-  <strong>TocoAI: Stop Vibe Coding. モデル駆動型の AI コーディングツール。</strong>
-  <strong>まずモデリング、コードはその後。「ガチャ」のような運任せのAIプログラミングに別れを告げましょう。</strong>
-</p>
+[English](./README.md) · **日本語** · [简体中文](./README.zh-CN.md)
 
-<p align="center">
-  <b><a href="https://github.com/toco-ai/toco-ai/blob/main/README.md">English</a> | <a href="https://github.com/toco-ai/toco-ai/blob/main/README.ja-JP.md">日本語</a> | <a href="https://github.com/toco-ai/toco-ai/blob/main/README.zh-CN.md">中文 (Simplified)</a></b>
-</p>
+<img height="100" alt="TocoAI" src="assets/logo.png" />
 
-<p align="center">
-  <a href="https://tocoai.dev/en/docs/installation"><img src="https://img.shields.io/badge/IntelliJ_IDEA-2024.03+-blue?style=for-the-badge" alt="IntelliJ IDEA" /></a>
-  <a href="https://tocoai.dev/en/docs/installation-vscode"><img src="https://img.shields.io/badge/VS_Code-1.82.0+-blue?style=for-the-badge" alt="VS Code" /></a>
-  <a href="https://discord.gg/NubsdbF3MK"><img src="https://img.shields.io/badge/Discord-Join_Community-5865F2?style=for-the-badge" alt="Discord" /></a>
-  <a href="https://x.com/TocoAI"><img src="https://img.shields.io/badge/X-@TocoAI-000000?style=for-the-badge" alt="X" /></a>
-</p>
+<h1>TocoAI</h1>
 
-<p align="center">
-  <img src="assets/hero_tocoai.gif" alt="TocoAI: More Reliable AI Architect -> More Controllable Backend Code -> >Easier Backend Changes<" width="800" />
-</p>
+<h3>DSL-Spec ベースのサーバーサイド Harness Engineering</h3>
 
-*<p align="center">👆 <b>より信頼できるAIアーキテクト</b> ➔ <b>より制御可能なバックエンドコード</b> ➔ <b>より安全な仕様変更</b></p>*
+[![][docs-shield]][docs-link]
+[![][license-shield]][license-link]
+[![][stack-shield]][stack-link]
+[![][engine-shield]][engine-link]
+
+<br/>
+
+[![][github-stars-shield]][github-stars-link]
+[![][github-issues-shield]][github-issues-link]
+[![][github-contributors-shield]][github-contributors-link]
+
+
+</div>
 
 ---
+
+TocoAI はサーバーサイド開発のための **Harness Engineering** ソリューションです。Spec はコードを一度生成するためのテキストではなく、**システムの構造制御レイヤー**であるべきです。
+
+- **DSL-Spec** によって大規模言語モデルの生成を制約し、コードと継続的に一貫性を保ちます。
+
+- **モデリングエンジン**によって構造的コードを確定的にレンダリングし、コードベースを常に安定させドリフトを防ぎます。
+
+長期的なイテレーションが必要なサーバーサイドプロジェクトにおいて、AI を常に人の設計意図のもとで動かします。
+
+<video src="https://github.com/user-attachments/assets/9c3dab56-f927-42d6-83c0-77a25ff65ecc" controls width="100%"></video>
 
 > [!TIP]
-> **TocoAI チームからのメッセージ**
-> 
-> ご関心をお寄せいただきありがとうございます！TocoAI 開発の動機は非常にシンプルです。私たちは「AIがアーキテクチャを無視してコードを書き散らすこと」や「AIが書いたコードの地雷を一行ずつ取り除く作業」にうんざりしていました。このツールが、ツギハギだらけのコード修正という日常からあなたを解放し、本来のビジネス設計に集中できる環境を取り戻す助けになれば幸いです。私たちと一緒に、より信頼性の高い AI 開発のスタンダードを築いていきましょう！🚀
+> 動くシステムを作りたいなら Cursor。長く維持できるシステムを作りたいなら TocoAI。
+
+<details>
+<summary><kbd>目次</kbd></summary>
+
+- [🚀 クイックスタート](#-クイックスタート)
+- [🏗️ Harness Engineering の考え方](#️-harness-engineering-の考え方)
+- [⚙️ コアコンポーネント](#️-コアコンポーネント)
+  - [📐 DSL-Spec](#-dsl-spec)
+  - [🔧 モデリングエンジン](#-モデリングエンジン)
+  - [🧭 Human-in-the-Loop](#-human-in-loop)
+- [⚖️ 他ツールとの比較](#️-他ツールとの比較)
+- [🎬 デモケース](#-デモケース)
+- [📋 実際の事例](#-実際の事例)
+- [🗺️ 適用シナリオと限界の考察](#️-適用シナリオと限界の考察)
+- [🤝 コミュニティと参加](#-コミュニティと参加)
+
+</details>
 
 ---
 
-### 🎯 解決したい課題とは？
-現在、AIコーディングツール（Cursor や Claude Code など）を使用する際、開発者が最も恐れていることは何でしょうか？
-1. **修正するほどコードがカオス化する**：自然言語の対話だけに頼ると、AI（LLM）はシステム全体のアーキテクチャに対する長期記憶を維持できません。小さな要件変更でも、AIは簡単に既存のデータ構造を壊したり、関連するビジネスロジックの修正を漏らしたりして、コードと本来の設計を乖離させてしまいます。だからこそ、TocoAI は視覚的な **ドメイン駆動設計（DDD）** を導入しました。この可視化された設計モデルが、AIの暴走を防ぐ「標準設計図」および「絶対的な基準」となります。
-2. **コードレビューでの圧倒的な疲弊**：AI（LLM）を完全に信用できないため、生成されたすべてのコードを「隠れたバグがないか」と目を皿のようにして確認する必要があります。この心理的負担は計り知れません。
+## 🚀 クイックスタート
 
-**Toco AI のアプローチは異なります：**
-AIに直接コードを「推測」させることはしません。代わりに、まずAIにビジネスドメインモデル（エンティティ、集約、値オブジェクトなど）とRead/Writeサービスを設計させます。あなたがその可視化された設計モデルを確認・承認した後、システムがモデルに基づいて**確定的（デターミニスティック）に**コードを生成します。
+- インストールと設定
+  - [IntelliJ Plugin →][intellij-link]
+  - [VS Code Plugin →][vscode-link]
+- [DSL-Spec 文法リファレンス →][dsl-docs-link]
 
 ---
 
-### ⚙️ どのように機能するのか？
-LLMによるコード生成のハルシネーション（幻覚）を排除するため、Toco AI は開発フローを2つのステップに分割しました：
+## 🏗️ Harness Engineering の考え方
 
-```text
-      [ Natural Language Description / Reference Documents ]
-                         │
-                         ▼
-┌─────────────────────────────────────────────────┐
-│                 Toco AI Architect               │
-│ Output: Visual Models (Domain / R&W Services)   │
-└─────────────────────────────────────────────────┘
-                         │ (Models verified by you)
-                         ▼
-┌───────────────────────┐ ➕ ┌───────────────────────┐
-│ Internal Code Engine  │    │     AI Programmer     │
-│(Gen 80% Skeleton Code)│    │ (Fills 20% Core Logic)│
-│  Zero-hallucination,  │    │ e.g., complex checks/ │
-│    100% accurate      │    │    math calculations  │
-└───────────────────────┘    └───────────────────────┘
-            │                            │
-            ▼                            ▼
-   [ Clean, Standardized, and Maintainable Backend Code ]
+サーバーサイドシステムは長期間の保守が必要であり、3D プリントではなく建物を建てることに近いです。私たちは**建築的思考**でシステムを構築します：
+
+- 精密な設計図が必要 — そのため DDD と CQRS に準拠した **DSL-Spec** を定義しました
+- 設計図ができたら、一貫性のある保守しやすいコード構造が必要 — そのため**モデリングエンジン**を開発し、構造的コードを確定的にレンダリングします。これは複雑なプロジェクトの約 **80%** を占めます
+- 最後に、構造が堅固でインターフェースが整ったビルの中で、AI に内装作業（DSL-Spec では表現しにくい if/else のビジネスロジック）を担当させます
+
+<div align="center">
+
+<img src="assets/tocoai-arch.png" alt="TocoAI アーキテクチャ" width="100%"/>
+
+</div>
+
+---
+
+## ⚙️ コアコンポーネント
+
+### 📐 DSL-Spec
+
+> *"形式的記号の使用は、あらゆるナンセンスを排除するための極めて効果的なツールである。自然言語の『自然さ』とは、荒唐無稽さが一見明らかでないことを容易に言える能力に過ぎない。"*
+>
+> — Edsger Dijkstra, EWD667, 1978
+
+要件とアーキテクチャ設計は、構造化された DSL-Spec として統一的に表現され、システム全体の **Single Source of Truth** として機能します。DSL-Spec は人間が読め、機械が解析できます。設定ファイルではありません — **実行可能なアーキテクチャの意図**です。
+
+|  | 自然言語 Spec | プログラム的 IaC | **DSL-Spec** |
+|--|:------------:|:--------------:|:------------:|
+| **明確な意味、可読性** | 誰でも読めるが、曖昧さはエラーにならず本番障害として現れる | 正確だが、意図を理解するには実行フローの理解が必要 | ✅ 自然言語のように読めて、コードのように正確 — 曖昧さはコンパイルエラー |
+| **詳細が明確（What + How）** | 曖昧な What のみ — How は AI の即興に任せる | How のみ — アーキテクチャの意図が実行ロジックに埋もれる | ✅ What（データの意図）と How（構造的制約）が両方明示的に表現される |
+| **検証可能、保守しやすい** | 機械検証不可；フィールド変更の影響範囲を手動で追跡する必要がある | 実行可能だが独立した意図レイヤーがない；変更の影響は分析ツールが必要 | ✅ 機械解析・検証可能；DSL-Spec を変更するとエンジンが影響する全構造を自動カスケード同期 |
+| **常にコードと一致** | 起動時は正確、3 ヶ月でドリフト、6 ヶ月で歴史文書になる | コードが実装だが、アーキテクチャの意図はイテレーションで失われる | ✅ Spec とコードの関係は常に `=`、`≈` ではない |
+
+<br/>
+
+DSL-Spec はサーバーサイドシステムの完全な設計階層をカバーします：
+
+| レイヤー | 要素 |
+|---------|------|
+| **ドメインモデル** | Entity / Relation / Enum / EO (Value Object) |
+| **集約** | BO / ドメインイベント |
+| **データ転送** | DTO / VO |
+| **クエリプラン** | ReadPlan |
+| **書き込みプラン** | WritePlan (Based on BO) |
+| **フロープラン** | FuncFlow（タスクオーケストレーション）/ メッセージ管理 |
+| **サービスインターフェース** | API / RPC / Service |
+
+<br/>
+
+1 つの DTO の DSL-Spec 定義から自動生成されるファイル：
+
+<table>
+<tr>
+<th width="22%">曖昧な要件</th>
+<th width="50%">DSL-Spec</th>
+<th width="28%">自動生成ファイル</th>
+</tr>
+<tr>
+<td>
+
+*"客室タイプの情報（対応する客室リストを含む）— さらに利用可能な客室数も含む。"*
+
+| 曖昧な点 | DSL での決定 |
+|---|---|
+| ルートエンティティはどれ？ | `fromEntity: room_type` |
+| 客室との関連は？ | `room.room_type_id` FK → **逆方向注入** |
+| `available_count` の出所は？ | エンティティにないフィールド → `customField` |
+
+</td>
+<td>
+
+```json
+{
+  "dto": {
+    "name": "room_type_with_rooms_dto",
+    "fromEntity": "room_type",
+    "reverseExpandList": [{
+      "foreignKeyInOtherEntity": "room_type_id",
+      "dtoFieldName": "room_list",
+      "dto": { "name": "room_base_dto", "fromEntity": "room" }
+    }],
+    "customFieldList": [{
+      "name": "available_count",
+      "type": "Integer"
+    }]
+  }
+}
 ```
 
-1. **AIがモデリングを支援**：ビジネス要件のドキュメントをツールに読み込ませると、AIが自動的に可視化された設計モデルを生成し、プロジェクトの永久的な記憶として保存します。
-2. **エンジンが 80% のスケルトンコードを生成**：内蔵エンジンが設計モデルを 1:1 で DDD（ドメイン駆動設計）に準拠したスケルトンコードに変換します。**この部分はエンジンによって確定的に生成されるため、ハルシネーションはゼロであり、レビューも不要です**。
-3. **AIが残り 20% のコアビジネスロジックを実装**：ポイントの減算ルールや権限チェックなど、固有のビジネス要件の詳細は、AIプログラマーがスケルトン内に実装します。**あなたがレビューすべきなのは、この 20% のコアビジネスロジックだけです**。
-4. **一箇所の修正で全体を同期**：要件が変更されましたか？可視化された設計モデルを直接修正するだけです。システムが自動的にカスケード更新をトリガーし、**関連するドメインモデル、サービス、および 80% のスケルトンコードが完全に自動同期されます**。その後、AIプログラマーが新しいスケルトンに合わせて 20% のコアロジックを自動調整し、修正漏れのリスクを大幅に低減します。
+</td>
+<td>
+
+```
+RoomTypeWithRoomsDto.java                (~60 Lines)
+RoomTypeWithRoomsDtoManager.java         (~25 Lines)
+RoomTypeWithRoomsDtoManagerImpl.java
+RoomTypeWithRoomsDtoConverter.java       (~80 Lines)
+RoomTypeWithRoomsDtoService.java         (~70 Lines)
+RoomTypeWithRoomsDtoDataAssembler.java
+RoomTypeWithRoomsDtoBaseDataAssembler.java
+```
+
+</td>
+</tr>
+</table>
+
+[DSL-Spec 完全文法ドキュメントを見る →][dsl-docs-link]
+
+<br/>
+
+### 🔧 モデリングエンジン
+
+エンジンはすべての構造的コードの生成をカバーします：
+
+- 階層スケルトン（`persist` / `manager` / `service` / `entrance`）
+- インターフェース契約とデータモデル
+- CQRS コマンド/クエリ分離
+- クロスレイヤーコンバーター（`DtoConverter` / `VoConverter`）
+- データアセンブラー（`DataAssembler`）
+- 集約書き込みチェーン（`BoService`）
+
+**開発者は残りの 20% のビジネスロジックだけに集中すればよい** — レビューコストが桁違いに下がります。
+
+> [!NOTE]
+> モデリングエンジンの本質は、ソフトウェアエンジニアリングの品質管理を**「設計時」に左シフト**することです — DSL-Spec で定義されたコードフレームワークを確定的にレンダリング生成します。構造的コードはエンジンが生成し、LLM がイテレーションごとに生成するのではありません。これにより AI のランダムなエラーとアーキテクチャドリフトを根本的に排除します。何度イテレーションしても、何人が関わっても、基盤構造は常に設計と一致し、時間の経過とともに腐敗しません。
+
+> [!IMPORTANT]
+> エンジンは **2026 年下半期**にオープンソース化される予定です。
+
+<br/>
+
+### 🧭 Human-in-the-Loop
+
+AI は全知ではありません。システムに長期的な影響を与える決定 — ドメイン境界、データ構造定義、インターフェース記述、読み書きプラン（トランザクション制約、操作パフォーマンス）— については、AI 支援の修正と手動制御を組み合わせた標準的なアプローチを提供します。
+
+**AI を常にアシスタントに留め、意思決定者にさせない。**
 
 ---
 
-### ⚔️ 主流の AI エディタとの比較
+## ⚖️ 他ツールとの比較
 
-| 比較次元 | Toco AI (モデル駆動) | 従来のAIアシスタント (Cursor / Claude Code等) |
-| --- | --- | --- |
-| **コードの出処** | **エンジン + 設計モデル**：80% のスケルトンコードはエンジンが確定的に生成。クリアな構造、規約準拠、ハルシネーションゼロ。 | **LLMの推測頼み**：プロンプトによる確率的な生成に完全依存。脱線しやすい。 |
-| **日常のタスク** | **設計に集中**：コアビジネスのモデリング（ドメイン/サービス）、API契約、アーキテクチャ設計に注力。 | **監査役になる**：一行ずつ文法をチェックし、地雷探しに追われる。 |
-| **レビューの負担** | **「穴埋め問題」**：レビューコストが大幅に低下。20% のコアビジネスロジックだけを見ればよい。 | **「長文の添削」**：すべての行を確認する必要があり、負担が極めて重い。 |
-| **仕様変更時** | **設計モデルを修正**：モデルを変更すれば、コードと設計が自動的に完全同期される。 | **ツギハギの修正**：テキスト指示だけでAIに修正箇所を探させるため、修正漏れが頻発する。 |
+Cursor と Claude Code は優れた汎用コーディングアシスタントです — 実際、TocoAI 内部でもビジネスロジックの実装に使用しています。私たちは異なるレベルの問題を解決します。
 
----
+> [!NOTE]
+> TocoAI の設計対象：**リレーショナルデータベース駆動のサーバーサイドシステムで、長期的なイテレーションと多人数の協業が必要なもの**。プロトタイプ、スクリプトツール、フロントエンドプロジェクトを作っているなら Cursor で十分です。
 
-### ⚡ 無料トライアルの申し込み
-LLMの膨大な計算コストをコントロールしつつ、**安定的で高品質な生成体験**を保証するため、Toco AI は無料トライアルの申し込みを一般公開しました。承認されると、最初の1ヶ月間に **30,000 クレジット** が無料で付与されます。
-
-👉 **[公式サイトで無料トライアルを申し込む](https://tocoai.dev/)**
-
-⭐ **まずは [toco-ai 組織をフォロー](https://github.com/toco-ai) することをお勧めします。また、[Discord コミュニティ](https://discord.gg/NubsdbF3MK) への参加や [公式 X アカウント](https://x.com/TocoAI) のフォローもお願いします。大型アップデートや限定特典の情報をいち早くお届けします！**
-
-**承認後のクイックスタート：**
-1. **プラグインのインストール**：主要なIDEをサポートしています。ダウンロードと詳細な設定については、[IntelliJ 公式インストールガイド](https://tocoai.dev/en/docs/installation) または [VS Code 公式インストールガイド](https://tocoai.dev/en/docs/installation-vscode) をご参照ください。
-   * **IntelliJ IDEA (2024.03+)**：`Settings ➔ Plugins ➔ ⚙️ ➔ Install Plugin from Disk...` からダウンロードした `.zip` を選択して再起動。
-   * **VS Code (1.82.0+)**：拡張機能パネルから `Install from VSIX…` を選び、`.vsix` ファイルをインストールして再起動。
-2. **体験開始**：IDEのサイドバーから Toco AI パネルを開き、ログインします。「**Example Requirements（要件の例）**」をクリックして、「要件 -> モデリング -> コード出力」という確定的な超高速ループを体験してください。
+|  | Cursor / Claude Code | TocoAI |
+|--|:--------------------:|:------:|
+| **役割** | 汎用対話式コーディングアシスタント | サーバーサイドエンジニアリング Harness、特定シナリオの構造化ソリューション |
+| **コードの出所** | LLM がプロンプトに基づいて生成 | DSL-Spec → エンジンによる確定的生成（80%）+ LLM によるビジネスロジック |
+| **アーキテクチャ一貫性** | プロンプトとレビューで維持 | DSL-Spec + エンジンで保証、人間依存なし |
+| **最適フェーズ** | 迅速なプロトタイピング、断片的なコーディング | 長期保守が必要な複雑なビジネスシステム |
+| **チーム規模** | 個人または小規模チームに最適 | チームが大きく、イテレーションが長いほど優位性が増す |
+| **学習コスト** | ほぼなし | DSL-Spec とモデリングアプローチの理解が必要 |
 
 ---
 
-### 🔌 エコシステムとフルスタック連携
-現代の開発はツールチェーンの連携が不可欠です。Toco AI は、あなたのフルスタック開発フローに統合され、その能力を拡張します：
+## 🎬 デモケース
 
-| エコシステム / シナリオ | サポート状況 | コアとなるワークフローと価値 |
-| ------ | ------ | ------ |
-| **バックエンド開発 (MDD モード)** | ✅ 柔軟なフルスタック対応 | 新規の Toco Project を作成し、独自のモデル駆動モードを起動。データベース駆動のバックエンド開発に最適です。エンタープライズ級のバックエンドや頻繁な要件変更において、開発効率の向上と「コードのカオス化」を防ぐ優位性が最大限に発揮されます。 |
-| **フロントエンド開発 (対話モード)** | ✅ 柔軟なフルスタック対応 | 非 Toco プロジェクトでは、Toco AI は Claude Code のような強化型対話アシスタントとしてシームレスに機能します。内蔵されたバックエンド API MCP（Model Context Protocol）機能により、フロントエンド開発でもバックエンドの API 契約を正確に把握できます。 |
-| **多言語サポート** | 🚧 鋭意開発中 | 現在、MDDエンジンは Java Spring エコシステムを深くサポートしています。Go / Python / Node.js 向けのアーキテクチャ生成エンジンは鋭意開発中です。 |
-| **MCP プロトコルエコシステム** | 📅 計画中 | 将来的には、MCP エコシステムを通じてより豊かなカスタマイズ拡張をサポートします。企業のプライベートな開発ツールチェーン、社内ナレッジベース、外部ツール群とシームレスに連携し、フルスタックコラボレーションの中枢を担います。 |
-| **Agent Skills (スキルマーケット)** | 📅 計画中 | カスタムスキルを公開予定。チームでよく使う開発のSOPをAgentスキルとして記述し、「AIにどうやって仕事をさせるか」という知見をコミュニティで共有できるようになります。 |
+### BnB 民泊予約プラットフォーム
 
----
+物件管理、ショッピングカート、注文決済、在庫検証、会員ポイントをカバーする完全な民泊予約プラットフォーム — TocoAI の要件から納品までのエンドツーエンドのワークフローをデモンストレーションします。
 
-### 🔒 プライバシーとセキュリティ
-あなたのコードはあなたのものです。私たちはコアとなるビジネス資産に対して最高レベルの保護を提供します：
-* **データ主権の約束**：デフォルトでは、ローカルのコードが無断でアップロードされることは決してありません。また、ビジネス要件、生成された設計モデル、およびコードが、公開AIモデルの学習に使用されることは**絶対にありません**。設定で意図的にデータ共有を有効にした場合でも、すべてのデータは厳格な匿名化処理の対象となります。
-* **オンプレミス（プライベート）対応**：エンタープライズ向けのプライベートデプロイメントをサポートしています。データは完全にローカル環境、または信頼できるプライベートクラウド環境に保存できます。
-* **クラウドインフラの安全性**：プラットフォームのデータは、業界トップクラスのクラウドデータセンター（AWS / Google Cloud 等）に保存されます。厳格なネットワーク分離設計により、プロジェクトファイルの高可用性とプライバシーの強力な保護を確保しています。
+**ビジネスカバレッジ：** 客室在庫 &nbsp;·&nbsp; カート &nbsp;·&nbsp; 注文 / サブ注文 &nbsp;·&nbsp; 支払い &nbsp;·&nbsp; ポイント控除 &nbsp;·&nbsp; 消費明細
+
+[完全なデモを見る →][bnb-demo-link]
 
 ---
 
-### 🤝 コミュニティへようこそ
-私たちは開発者の皆様とともに、より良い AI 開発のスタンダードを築きたいと考えています：
+## 📋 実際の事例
 
-* **`.toco` ルールの貢献**：[toco-rules-library](https://github.com/toco-ai/toco-rules-library) リポジトリにて、**TocoAI の各 Agent（ドメインアーキテクト、プランナー、デベロッパー等）のプロンプトテンプレート**の提出や改善をお待ちしています。
-* **ベストプラクティスの活用**：ECサイトや医療などの実際のユースケースの参考モデルは [toco-domain-models](https://github.com/toco-ai/toco-domain-models) リポジトリから取得できます。また、コミュニティが貢献した完全なプロジェクトのソースコードやアーキテクチャテンプレートは、公式キュレーションリポジトリ [awesome-tocoai](https://github.com/toco-ai/awesome-tocoai) で探索できます。
+### 大規模病院 HIS システム
+
+**背景：** 次世代全院管理システム、120+ コアモジュール、200+ 業務フロー、マルチチーム並列開発。
+
+**課題：** 医療業務はゼロエラー許容；多人数の時間をまたいだ協業でロジックギャップと技術的負債が生じやすい。
+
+**結果：** アーキテクチャ標準が一貫して適用され、生成コードの精度が大幅に向上；プロジェクト全体の AI コード採用率は **97%** 近く；引き継ぎ時に新メンバーがプロジェクト全体を迅速に把握できる。
+
+[事例の詳細を見る →][case-his-link]
+
+<br/>
+
+### 金融証拠金決済システムのリファクタリング
+
+**背景：** レガシーな証拠金決済システムのリファクタリング。元の技術スタックは SQLServer 2008 + 大量のストアドプロシージャ + 複数のサードパーティミドルウェア。
+
+**課題：** 業務フローが分散；データとビジネスの関係が不明確；パフォーマンスボトルネックが顕著。
+
+**結果：** DSL-Spec で再モデリングし、ビジネス関係を明示化；エンドツーエンドのフローが追跡可能；システムは TocoAI フレームワークでのイテレーションを継続できる。
+
+[事例の詳細を見る →][case-finance-link]
 
 ---
 
-**Stop Vibe Coding. Start Deterministic Engineering.**
+## 🗺️ 適用シナリオと限界の考察
 
-👇 **[こちらから無料トライアルをお申し込みください](https://tocoai.dev/)。または [Discord コミュニティ](https://discord.gg/NubsdbF3MK) でお気軽に話しかけてください！**
-[最新情報は @TocoAI をフォローしてチェックしてください](https://x.com/TocoAI)
+すべての DSL は **domain-specific** です。特定のドメイン内でのみ有効であり、すべてをカバーできる汎用 DSL は存在しません — 無理に汎用化すると、別のプログラミング言語を作ることになります。TocoAI の DSL-Spec はリレーショナルデータベース駆動のサーバーサイドシステムのみを記述します。これは意図的な境界であり、能力の制限ではありません。
+
+単一ドメイン内でも、DSL-Spec はプログラミングコードを置き換えるものではありません。私たちの境界は**構造化記述に適した情報を DSL-Spec 化する**ことであり、残りのビジネスロジックはプログラミング言語と AI に委ねます。
+
+**レガシープロジェクトの互換性：** レガシープロジェクトに新しいモジュールを開発することはできますが、既存のレガシーコードをすべて引き継ぐことはスコープ外です。正しいアプローチは、新しい要件を新しいモジュールで処理し、古いロジックを徐々に DSL-Spec の管轄範囲に移行することです — **リファクタリングは AI 時代の日常業務**です。
+
+Harness Engineering のアプローチ自体は汎用的です。組み込みシステム、フロントエンドコンポーネント、インフラ設定など、他のチームが各自のドメインで拡張することを期待しています。
+
+---
+
+## 🤝 コミュニティと参加
+
+- [tocoai.jp][docs-link] で完全なドキュメントを参照
+- [Discord コミュニティ][discord-link]に参加して質問、機能の議論、実践の共有
+- [GitHub Issues][github-issues-link] でバグ報告や機能提案を提出
+- モデリングエンジンは **2026 年下半期**にオープンソース化予定 — Star でウォッチ
+
+完璧な技術はなく、適したシナリオがあるだけです。AI が開発を変えてまだ 1 年ですが、ソフトウェア開発自体には 70〜80 年の歴史があります。
+
+[コントリビューションガイド →](CONTRIBUTING.md)
+
+---
+
+<div align="center">
+
+Copyright © 2025 TocoAI. Released under the [Apache 2.0][license-link] License.
+
+</div>
+
+<!-- LINK GROUP -->
+[docs-shield]: https://img.shields.io/badge/Docs-tocoai.jp-brightgreen?style=flat-square&color=73DC8C&labelColor=black
+[docs-link]: https://tocoai.jp/docs
+
+[license-shield]: https://img.shields.io/badge/License-Apache_2.0-blue?style=flat-square&color=4B78E6&labelColor=black
+[license-link]: LICENSE
+
+[stack-shield]: https://img.shields.io/badge/Stack-Java_|_Spring_Boot-orange?style=flat-square&color=ffcb47&labelColor=black
+[stack-link]: https://tocoai.cn
+
+[engine-shield]: https://img.shields.io/badge/Engine_OSS-H2_2026-pink?style=flat-square&color=FA9BFA&labelColor=black
+[engine-link]: https://tocoai.cn/docs/engine
+
+[github-stars-shield]: https://img.shields.io/github/stars/tocoai/toco?style=flat-square&color=ffcb47&labelColor=black&logo=github
+[github-stars-link]: https://github.com/tocoai/toco/stargazers
+
+[github-issues-shield]: https://img.shields.io/github/issues/tocoai/toco?style=flat-square&color=ff80eb&labelColor=black&logo=github
+[github-issues-link]: https://github.com/tocoai/toco/issues
+
+[github-contributors-shield]: https://img.shields.io/github/contributors/tocoai/toco?style=flat-square&color=c4f042&labelColor=black&logo=github
+[github-contributors-link]: https://github.com/tocoai/toco/graphs/contributors
+
+[intellij-link]: https://tocoai.jp/docs/installation
+[vscode-link]: https://tocoai.jp/docs/installation-vscode
+[dsl-docs-link]: ./assets/dsl.md
+[engine-docs-link]: https://tocoai.cn/docs/engine
+[bnb-demo-link]: https://tocoai.cn/docs/your-first-toco-project
+[case-his-link]: https://tocoai.cn/cases/his
+[case-finance-link]: https://tocoai.cn/cases/finance
+[discord-link]: https://tocoai.cn/discord
