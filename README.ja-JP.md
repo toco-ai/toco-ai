@@ -9,7 +9,7 @@
 <h3>DSL-Spec ベースのサーバーサイド Harness Engineering</h3>
 
 [![][docs-shield]][docs-link]
-[![][license-shield]][license-link]
+[![][doc-license-shield]][doc-license-link]
 [![][stack-shield]][stack-link]
 [![][engine-shield]][engine-link]
 
@@ -91,15 +91,6 @@ TocoAI はサーバーサイド開発のための **Harness Engineering** ソリ
 
 要件とアーキテクチャ設計は、構造化された DSL-Spec として統一的に表現され、システム全体の **Single Source of Truth** として機能します。DSL-Spec は人間が読め、機械が解析できます。設定ファイルではありません — **実行可能なアーキテクチャの意図**です。
 
-|  | 自然言語 Spec | プログラム的 IaC | **DSL-Spec** |
-|--|:------------:|:--------------:|:------------:|
-| **明確な意味、可読性** | 誰でも読めるが、曖昧さはエラーにならず本番障害として現れる | 正確だが、意図を理解するには実行フローの理解が必要 | ✅ 自然言語のように読めて、コードのように正確 — 曖昧さはコンパイルエラー |
-| **詳細が明確（What + How）** | 曖昧な What のみ — How は AI の即興に任せる | How のみ — アーキテクチャの意図が実行ロジックに埋もれる | ✅ What（データの意図）と How（構造的制約）が両方明示的に表現される |
-| **検証可能、保守しやすい** | 機械検証不可；フィールド変更の影響範囲を手動で追跡する必要がある | 実行可能だが独立した意図レイヤーがない；変更の影響は分析ツールが必要 | ✅ 機械解析・検証可能；DSL-Spec を変更するとエンジンが影響する全構造を自動カスケード同期 |
-| **常にコードと一致** | 起動時は正確、3 ヶ月でドリフト、6 ヶ月で歴史文書になる | コードが実装だが、アーキテクチャの意図はイテレーションで失われる | ✅ Spec とコードの関係は常に `=`、`≈` ではない |
-
-<br/>
-
 DSL-Spec はサーバーサイドシステムの完全な設計階層をカバーします：
 
 | レイヤー | 要素 |
@@ -175,6 +166,28 @@ RoomTypeWithRoomsDtoBaseDataAssembler.java
 
 <br/>
 
+#### DSL-Spec：開発システムの Ontology
+
+従来の開発では、テスト・CI/CD・変更管理はそれぞれ異なるデータソースに依存していました — テストは開発者のコード理解に依存し、CI はコンパイルとテスト実行しか検証できず、変更管理は手動の影響範囲追跡に頼っています。これらのプロセスはシステムを真に「理解」しているのではなく、コードという事実が生まれた後に受動的に追随しているだけです。DSL-Spec の核心的価値は、開発パイプライン全体の唯一の Ontology（本体）になることにあります：システムの構造・ルール・関係が Spec に一度定義され、すべてのダウンストリームプロセスが同じ真実から派生し、それぞれが独自の現実の近似を維持する必要がなくなります。
+
+1. **テスト**：Spec に明示的に宣言されたビジネスルール（フィールド制約・列挙型制限など）が直接テストアサーションのソースになり、コードからの逆推論に依存しません。各 Function Flow ノードは Context オブジェクトを通じて明確な入出力契約を定義し、フルコールチェーンをモックせずにノードごとの独立したユニットテストが書けます。エンジンが生成する 80% の構造的コードの正確性はエンジン自体が保証するため、テストリソースを本当にビジネスリスクのある 20% に集中できます。
+
+2. **CI/CD**：パイプラインに Spec コンプライアンスチェックを組み込めます — コードベースの生成コードが現在の Spec と完全一致するかを検証し、エンジンをバイパスした手動編集があれば CI が即座にブロック、メカニズムレベルで技術的負債を排除します。モデルフィールドや関連関係の変更時、エンジンが同期的に DDL マイグレーションスクリプトを出力し、CI がスキーマ変更とコードデプロイを順序どおりに強制バインド実行して、データベースとコードが同期しないウィンドウを排除します。API シグネチャの変更はエンジンが自動的に diff し、CI が breaking change かどうかを判定してインターフェースバージョンアップグレードフローをトリガーできます。
+
+3. **変更管理**：1 つの集約フィールドを変更すると、エンジンが影響を受けるすべての Service・DTO・API・データベーステーブルを自動計算してリストアップ — 影響範囲が Spec から直接推導され、開発者の経験に依存しません。変更レビューはコード diff ではなく Spec diff を見ることになり、非技術系のステークホルダーも直接参加できます。各 Spec コミットが構造化された変更記録を自動生成し、「誰が何を変更し、どのモジュールに影響したか」を完全に追跡でき、コンプライアンス監査の証跡として直接使用できます。
+
+<br/>
+
+|  | 自然言語 Spec | プログラム的 IaC | **DSL-Spec** |
+|--|:------------:|:--------------:|:------------:|
+| **明確な意味、可読性** | 誰でも読めるが、曖昧さはエラーにならず本番障害として現れる | 正確だが、意図を理解するには実行フローの理解が必要 | ✅ 自然言語のように読めて、コードのように正確 — 曖昧さはコンパイルエラー |
+| **詳細が明確（What + How）** | 曖昧な What のみ — How は AI の即興に任せる | How のみ — アーキテクチャの意図が実行ロジックに埋もれる | ✅ What（データの意図）と How（構造的制約）が両方明示的に表現される |
+| **検証可能、保守しやすい** | 機械検証不可；フィールド変更の影響範囲を手動で追跡する必要がある | 実行可能だが独立した意図レイヤーがない；変更の影響は分析ツールが必要 | ✅ 機械解析・検証可能；DSL-Spec を変更するとエンジンが影響する全構造を自動カスケード同期 |
+| **常にコードと一致** | 起動時は正確、3 ヶ月でドリフト、6 ヶ月で歴史文書になる | コードが実装だが、アーキテクチャの意図はイテレーションで失われる | ✅ Spec とコードの関係は常に `=`、`≈` ではない |
+| **開発全パイプラインの Ontology 価値** | Ontology として機能できない — テスト・CI・変更管理がそれぞれ独自のシステム近似を維持 | 実行レイヤーの Ontology として機能できるが、意図レイヤーが欠如しており、下流プロセスが設計意図を検証しにくい | ✅ 統一 Ontology — テストアサーション・DDL 変更・影響範囲分析すべてが同じ真実から派生 |
+
+<br/>
+
 ### 🔧 モデリングエンジン
 
 エンジンはすべての構造的コードの生成をカバーします：
@@ -230,7 +243,7 @@ Cursor と Claude Code は優れた汎用コーディングアシスタントで
 
 **ビジネスカバレッジ：** 客室在庫 &nbsp;·&nbsp; カート &nbsp;·&nbsp; 注文 / サブ注文 &nbsp;·&nbsp; 支払い &nbsp;·&nbsp; ポイント控除 &nbsp;·&nbsp; 消費明細
 
-[完全なデモを見る →][bnb-demo-link]
+[プロセス例を見る →][bnb-demo-link] · [プロジェクトコード →][bnb-code-link]
 
 ---
 
@@ -255,8 +268,6 @@ Cursor と Claude Code は優れた汎用コーディングアシスタントで
 **課題：** 業務フローが分散；データとビジネスの関係が不明確；パフォーマンスボトルネックが顕著。
 
 **結果：** DSL-Spec で再モデリングし、ビジネス関係を明示化；エンドツーエンドのフローが追跡可能；システムは TocoAI フレームワークでのイテレーションを継続できる。
-
-[事例の詳細を見る →][case-finance-link]
 
 ---
 
@@ -287,7 +298,7 @@ Harness Engineering のアプローチ自体は汎用的です。組み込みシ
 
 <div align="center">
 
-Copyright © 2025 TocoAI. Released under the [Apache 2.0][license-link] License.
+Copyright © 2025 TocoAI. ドキュメントは [CC BY 4.0][doc-license-link] ライセンスの下で公開されています。
 
 </div>
 
@@ -298,26 +309,30 @@ Copyright © 2025 TocoAI. Released under the [Apache 2.0][license-link] License.
 [license-shield]: https://img.shields.io/badge/License-Apache_2.0-blue?style=flat-square&color=4B78E6&labelColor=black
 [license-link]: LICENSE
 
+[doc-license-shield]: https://img.shields.io/badge/ドキュメント-CC%20BY%204.0-lightgrey?style=flat-square&color=a78bfa&labelColor=black
+[doc-license-link]: https://creativecommons.org/licenses/by/4.0/
+
 [stack-shield]: https://img.shields.io/badge/Stack-Java_|_Spring_Boot-orange?style=flat-square&color=ffcb47&labelColor=black
 [stack-link]: https://tocoai.cn
 
 [engine-shield]: https://img.shields.io/badge/Engine_OSS-H2_2026-pink?style=flat-square&color=FA9BFA&labelColor=black
 [engine-link]: https://tocoai.cn/docs/engine
 
-[github-stars-shield]: https://img.shields.io/github/stars/tocoai/toco?style=flat-square&color=ffcb47&labelColor=black&logo=github
-[github-stars-link]: https://github.com/tocoai/toco/stargazers
+[github-stars-shield]: https://img.shields.io/github/stars/toco-ai/toco-ai?style=flat-square&color=ffcb47&labelColor=black&logo=github
+[github-stars-link]: https://github.com/toco-ai/toco-ai/stargazers
 
-[github-issues-shield]: https://img.shields.io/github/issues/tocoai/toco?style=flat-square&color=ff80eb&labelColor=black&logo=github
-[github-issues-link]: https://github.com/tocoai/toco/issues
+[github-issues-shield]: https://img.shields.io/github/issues/toco-ai/toco-ai?style=flat-square&color=ff80eb&labelColor=black&logo=github
+[github-issues-link]: https://github.com/toco-ai/toco-ai/issues
 
-[github-contributors-shield]: https://img.shields.io/github/contributors/tocoai/toco?style=flat-square&color=c4f042&labelColor=black&logo=github
-[github-contributors-link]: https://github.com/tocoai/toco/graphs/contributors
+[github-contributors-shield]: https://img.shields.io/github/contributors/toco-ai/toco-ai?style=flat-square&color=c4f042&labelColor=black&logo=github
+[github-contributors-link]: https://github.com/toco-ai/toco-ai/graphs/contributors
 
 [intellij-link]: https://tocoai.jp/docs/installation
 [vscode-link]: https://tocoai.jp/docs/installation-vscode
 [dsl-docs-link]: ./assets/dsl.md
 [engine-docs-link]: https://tocoai.cn/docs/engine
-[bnb-demo-link]: https://tocoai.cn/docs/your-first-toco-project
+[bnb-demo-link]: https://tocoai.jp/docs/your-first-toco-project
+[bnb-code-link]: https://github.com/toco-ai/homestay
 [case-his-link]: https://tocoai.cn/cases/his
 [case-finance-link]: https://tocoai.cn/cases/finance
-[discord-link]: https://tocoai.cn/discord
+[discord-link]: https://discord.gg/NubsdbF3MK
