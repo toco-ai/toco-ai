@@ -333,6 +333,6 @@ Copyright © 2025 TocoAI. 文档基于 [CC BY 4.0][doc-license-link] 协议发�
 [engine-docs-link]: https://tocoai.cn/docs/engine
 [bnb-demo-link]: https://tocoai.cn/docs/your-first-toco-project
 [bnb-code-link]: https://github.com/toco-ai/homestay
-[case-his-link]: https://tocoai.cn/cases/his
+[case-his-link]: ./case-study/TocoAI-HIS-DrugInventory-Case-Study.zh-CN.md
 [case-finance-link]: https://tocoai.cn/cases/finance
 [discord-link]: https://discord.gg/NubsdbF3MK
