@@ -332,6 +332,6 @@ Copyright © 2025 TocoAI. Documentation released under [CC BY 4.0][doc-license-l
 [engine-docs-link]: https://tocoai.cn/docs/engine
 [bnb-demo-link]: https://tocoai.dev/docs/your-first-toco-project
 [bnb-code-link]: https://github.com/toco-ai/homestay
-[case-his-link]: https://tocoai.cn/cases/his
+[case-his-link]: ./case-study/TocoAI-HIS-DrugInventory-Case-Study.md
 [case-finance-link]: https://tocoai.cn/cases/finance
 [discord-link]: https://discord.gg/NubsdbF3MK
