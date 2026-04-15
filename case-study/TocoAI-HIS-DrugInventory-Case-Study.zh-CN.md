@@ -158,14 +158,14 @@ erDiagram
 
 **核心聚合**：
 
-| 聚合 | 聚合根 | 子实体 | 职责 |
-|------|--------|--------|------|
-| drug_import | drug_import | drug_import_detail | 入库单及明细管理 |
-| drug_inventory_batch | drug_inventory_batch | - | 批次元信息管理 |
-| drug_origin_inventory | drug_origin_inventory | drug_origin_batch_inventory | 药品产地库存及批次库存核算 |
-| drug_inventory_circulation_detail | drug_inventory_circulation_detail | - | 库存流通明细记录 |
-| drug_detail_ledger（跨模块） | drug_detail_ledger | - | 药品明细账 |
-| drug_price_contrast（跨模块） | drug_price_contrast | - | 药品价格对照 |
+| 聚合 | 领域对象（聚合根 / 子实体） | 职责 |
+|------|----------------------------|------|
+| drug_import | drug_import<br>drug_import_detail | 入库单及明细管理 |
+| drug_inventory_batch | drug_inventory_batch | 批次元信息管理 |
+| drug_origin_inventory | drug_origin_inventory<br>drug_origin_batch_inventory | 药品产地库存及批次库存核算 |
+| drug_inventory_circulation_detail | drug_inventory_circulation_detail | 库存流通明细记录 |
+| drug_detail_ledger（跨模块） | drug_detail_ledger | 药品明细账 |
+| drug_price_contrast（跨模块） | drug_price_contrast | 药品价格对照 |
 
 **聚合设计说明**：
 
