@@ -15,6 +15,8 @@
 
 [← 返回主 README][main-readme] · [DSL 语法参考][dsl-ref] · [BnB 演示 →][bnb-demo]
 
+**简体中文** · [English](TocoAI-HIS-DrugInventory-Case-Stud.md) · [日本語](TocoAI-HIS-DrugInventory-Case-Study.ja-JP.md)
+
 </div>
 
 ---
